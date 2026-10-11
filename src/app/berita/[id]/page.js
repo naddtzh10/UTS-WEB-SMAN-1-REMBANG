@@ -4,6 +4,12 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { daftarBerita } from "../data";
 
+export function generateStaticParams() {
+  return daftarBerita.map((berita) => ({
+    id: String(berita.id),
+  }));
+}
+
 export default async function DetailBeritaPage({ params }) {
   const { id } = await params;
 
@@ -82,8 +88,14 @@ export default async function DetailBeritaPage({ params }) {
             </p>
 
             {berita.isi && (
-              <div className="mt-6 whitespace-pre-line text-sm leading-8 text-slate-700 md:text-base">
-                {berita.isi}
+              <div className="mt-6 space-y-4 text-sm leading-8 text-slate-700 md:text-base">
+                {Array.isArray(berita.isi) ? (
+                  berita.isi.map((paragraf, index) => (
+                    <p key={index}>{paragraf}</p>
+                  ))
+                ) : (
+                  <p>{berita.isi}</p>
+                )}
               </div>
             )}
 
